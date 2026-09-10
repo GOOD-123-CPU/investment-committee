@@ -1,0 +1,338 @@
+import type { StockProfile } from '@/lib/types'
+
+/**
+ * 全球热门标的快照库（美股/中概股，截至 2025Q3，基于公开年报/季报整理的近似数据）
+ * 与 stocks.ts 同等地位：让全球标的获得与贵州茅台完全一致的全流程研究体验。
+ * 规则（对应 PRD Hallucination Guard）：
+ *  - 财务数字口径：报告币种为 CNY 的公司（PDD/JD/BIDU/NTES/NIO/LI/XPEV）用人民币亿元；
+ *    美元报告公司统一折算为人民币亿元（≈7.2），现价/52 周高低为当地币种（USD）
+ *  - 所有关键财务数字仅可来自本文件 / stocks.ts / web_search 真实检索结果
+ *  - 实时行情（腾讯/雅虎）到达时，现价、PE-TTM、PB、52 周高低以实时数据为准
+ */
+
+const G = (p: StockProfile) => p
+
+export const GLOBAL_STOCKS: StockProfile[] = [
+  G({
+    code: 'NVDA', name: '英伟达', market: 'US', alias: ['nvidia', '英伟达nvda'],
+    industry: '半导体/AI算力', sector: '科技', currency: 'USD',
+    description: '全球 AI 算力绝对龙头，数据中心 GPU 市占率超 80%，CUDA 生态构成软硬件一体护城河，Blackwell/Rubin 迭代节奏领先。',
+    price: 225, changePct: -2.0, marketCap: 312000,
+    valuation: { pe: 47, pePercentile: 62, pb: 42, dividendYield: 0.03, peerAvgPe: 35 },
+    financials: { revenue: 9370, revenueGrowth: 114.2, netProfit: 5230, profitGrowth: 144.9, grossMargin: 75.0, netMargin: 55.8, roe: 91.5, debtRatio: 12, ocf: 4610 },
+    history: [
+      { year: 'FY2023', revenue: 4150, profit: 660, roe: 24.1 },
+      { year: 'FY2024', revenue: 4390, profit: 2130, roe: 63.5 },
+      { year: 'FY2025', revenue: 9370, profit: 5230, roe: 91.5 },
+    ],
+    technicals: { change1m: -6.5, change3m: 12.0, change6m: 28.0, change1y: 45.0, high52w: 250, low52w: 86, maTrend: 'above_mid', rsi14: 44, volatility: 'high' },
+    industryContext: { size: '2025 全球 AI 资本开支（四大云厂）约 4000 亿美元', growth: '数据中心 Capex 未来三年 CAGR 25%+', stage: '成长期', concentration: 'AI 训练芯片市占率 80%+', outlook: '云厂商 Capex 军备竞赛延续，推理需求接棒训练；中国市场份额受出口管制压制，主权 AI 与企业侧是新增量。' },
+    competitive: { rank: 'AI 芯片全球第 1', marketShare: '数据中心 AI 加速卡约 80-90%', moat: ['CUDA 软件生态', 'NVLink/机架级系统', '迭代速度（一年一代）'], competitors: [{ name: 'AMD', code: 'AMD' }, { name: '博通', code: 'AVGO' }] },
+    risks: ['大客户自研芯片（ASIC）替代', '出口管制与地缘政治', 'AI Capex 周期性回落', '估值对增速放缓高度敏感'],
+    catalysts: ['Blackwell/Rubin 超预期放量', '主权 AI 订单', '推理需求爆发', '新业绩指引上修'],
+  }),
+  G({
+    code: 'AAPL', name: '苹果公司', market: 'US', alias: ['apple', '苹果'],
+    industry: '消费电子/生态', sector: '科技', currency: 'USD',
+    description: '全球市值最大公司之一，iPhone+服务双引擎，硬件生态封闭性与品牌溢价构成护城河，AI（Apple Intelligence）驱动换机周期。',
+    price: 268, changePct: 0.5, marketCap: 286000,
+    valuation: { pe: 34, pePercentile: 82, pb: 55, dividendYield: 0.44, peerAvgPe: 28 },
+    financials: { revenue: 28150, revenueGrowth: 2.0, netProfit: 6750, profitGrowth: -3.4, grossMargin: 46.2, netMargin: 24.0, roe: 156, debtRatio: 82, ocf: 8500 },
+    history: [
+      { year: 'FY2022', revenue: 28570, profit: 6980, roe: 175 },
+      { year: 'FY2023', revenue: 27180, profit: 6990, roe: 172 },
+      { year: 'FY2024', revenue: 28150, profit: 6750, roe: 156 },
+    ],
+    technicals: { change1m: 3.5, change3m: 8.0, change6m: 15.0, change1y: 22.0, high52w: 288, low52w: 164, maTrend: 'above_all', rsi14: 58, volatility: 'medium' },
+    industryContext: { size: '全球智能手机年出货约 12 亿部', growth: '换机周期拉长至 40 个月+，AI 手机渗透是新催化', stage: '成熟期', concentration: '高端机（600 美元+）苹果份额约 70%', outlook: '服务业务（毛利 74%）持续双位数增长，AI 换机与新兴市场（印度）是主要变量，中国区竞争承压。' },
+    competitive: { rank: '全球第 1（市值）', marketShare: '全球手机利润份额约 80%', moat: ['iOS 生态锁定', '品牌与渠道', '芯片自研'], competitors: [{ name: '三星电子', code: '005930.KS' }, { name: '华为（未上市）', code: '' }] },
+    risks: ['中国区份额被华为/小米挤压', 'AI 功能推进不及预期', 'App Store 监管抽成承压', '高估值对个位数增长敏感'],
+    catalysts: ['iPhone 17 超级周期', 'AI 驱动换机', '服务双位数增长', '大额回购持续'],
+  }),
+  G({
+    code: 'MSFT', name: '微软', market: 'US', alias: ['microsoft', '微软msft'],
+    industry: '云计算/软件', sector: '科技', currency: 'USD',
+    description: '全球最大软件公司，Azure+Copilot 双轮驱动，OpenAI 独家合作绑定前沿模型能力，企业软件订阅模式现金流极其稳定。',
+    price: 505, changePct: 0.8, marketCap: 376000,
+    valuation: { pe: 37, pePercentile: 68, pb: 12.5, dividendYield: 0.68, peerAvgPe: 30 },
+    financials: { revenue: 20280, revenueGrowth: 15.0, netProfit: 7330, profitGrowth: 15.8, grossMargin: 68.6, netMargin: 36.1, roe: 32.5, debtRatio: 45, ocf: 9790 },
+    history: [
+      { year: 'FY2023', revenue: 15850, profit: 5230, roe: 39.2 },
+      { year: 'FY2024', revenue: 17540, profit: 6330, roe: 38.5 },
+      { year: 'FY2025', revenue: 20280, profit: 7330, roe: 32.5 },
+    ],
+    technicals: { change1m: 2.0, change3m: 10.0, change6m: 25.0, change1y: 30.0, high52w: 555, low52w: 385, maTrend: 'above_all', rsi14: 56, volatility: 'medium' },
+    industryContext: { size: '全球公有云市场年约 8000 亿美元', growth: '云+AI 服务未来三年 CAGR 约 20%', stage: '成长期', concentration: 'Azure 全球云份额约 25%（第 2）', outlook: 'Azure 增速 30%+ 且 AI 贡献占比提升，Copilot 商业化（企业 seat 渗透）是估值核心，Capex 高企是短期利润扰动。' },
+    competitive: { rank: '全球软件第 1 / 云第 2', marketShare: '办公软件生产力市场份额约 45%', moat: ['企业级生态切换成本', 'OpenAI 独家云合作', '订阅模式'], competitors: [{ name: '亚马逊', code: 'AMZN' }, { name: '谷歌', code: 'GOOGL' }] },
+    risks: ['AI Capex 投入回报周期长', 'OpenAI 关系重构不确定性', '云竞争（AWS/谷歌）价格战', '反垄断审查'],
+    catalysts: ['Copilot 付费渗透加速', 'Azure AI 收入超预期', 'Office 365 提价', '利润率企稳回升'],
+  }),
+  G({
+    code: 'GOOGL', name: '谷歌', market: 'US', alias: ['google', 'alphabet', '谷歌a'],
+    industry: '互联网/AI', sector: '科技', currency: 'USD',
+    description: '全球搜索与数字广告霸主，Gemini 3 重塑 AI 搜索，谷歌云（TPU 自研）加速增长，Waymo 领先自动驾驶。',
+    price: 320, changePct: 1.2, marketCap: 390000,
+    valuation: { pe: 31, pePercentile: 72, pb: 8.5, dividendYield: 0.4, peerAvgPe: 28 },
+    financials: { revenue: 25200, revenueGrowth: 13.9, netProfit: 7210, profitGrowth: 35.7, grossMargin: 58.2, netMargin: 28.6, roe: 32.9, debtRatio: 28, ocf: 9000 },
+    history: [
+      { year: '2022', revenue: 21230, profit: 4520, roe: 23.4 },
+      { year: '2023', revenue: 22130, profit: 5310, roe: 27.4 },
+      { year: '2024', revenue: 25200, profit: 7210, roe: 32.9 },
+    ],
+    technicals: { change1m: 5.0, change3m: 18.0, change6m: 45.0, change1y: 65.0, high52w: 330, low52w: 142, maTrend: 'above_all', rsi14: 62, volatility: 'high' },
+    industryContext: { size: '全球数字广告约 8000 亿美元', growth: '云+AI 驱动整体双位数增长', stage: '成熟期', concentration: '全球搜索份额约 90%', outlook: 'Gemini 落后担忧被证伪后估值重估，TPU 自研降低 AI 算力成本，云积压订单充足；反垄断与 AI 搜索分流是长期变量。' },
+    competitive: { rank: '搜索/广告全球第 1', marketShare: '搜索广告份额约 90%', moat: ['搜索数据飞轮', 'TPU+Gemini 全栈 AI', 'YouTube/Android 生态'], competitors: [{ name: '微软', code: 'MSFT' }, { name: 'Meta', code: 'META' }] },
+    risks: ['反垄断诉讼与业务拆分风险', 'AI 搜索（ChatGPT 类）分流广告', '云竞争激烈', '广告宏观敏感性'],
+    catalysts: ['Gemini 商业化超预期', '云增速维持 30%+', 'Waymo 规模化估值重估', '回购+分红加码'],
+  }),
+  G({
+    code: 'AMZN', name: '亚马逊', market: 'US', alias: ['amazon', '亚马逊amzn'],
+    industry: '电商/云计算', sector: '科技', currency: 'USD',
+    description: '全球电商与云计算双巨头，AWS 是利润基石（营业利润占比 60%+），零售端履约网络与 Prime 生态构成壁垒。',
+    price: 235, changePct: 0.6, marketCap: 250000,
+    valuation: { pe: 33, pePercentile: 55, pb: 7.2, dividendYield: 0, peerAvgPe: 30 },
+    financials: { revenue: 45930, revenueGrowth: 11.0, netProfit: 4260, profitGrowth: 94.0, grossMargin: 48.9, netMargin: 9.3, roe: 22.5, debtRatio: 55, ocf: 8350 },
+    history: [
+      { year: '2022', revenue: 38610, profit: -190, roe: -1.5 },
+      { year: '2023', revenue: 41480, profit: 2190, roe: 13.9 },
+      { year: '2024', revenue: 45930, profit: 4260, roe: 22.5 },
+    ],
+    technicals: { change1m: 1.5, change3m: 8.0, change6m: 20.0, change1y: 18.0, high52w: 260, low52w: 151, maTrend: 'above_all', rsi14: 55, volatility: 'high' },
+    industryContext: { size: '全球云约 8000 亿美元 / 美国电商约 1.2 万亿美元', growth: 'AWS 20%+ 增长，零售高个位数', stage: '成熟期', concentration: '美国电商份额约 40%', outlook: 'AWS 受益 AI 工作负载（Trainium 自研芯片），零售利润率持续改善（区域化履约+广告），Capex 高企压制自由现金流。' },
+    competitive: { rank: '云全球第 1 / 电商美国第 1', marketShare: 'AWS 云份额约 30-31%', moat: ['AWS 规模与技术', '履约网络', 'Prime 会员生态'], competitors: [{ name: '微软', code: 'MSFT' }, { name: '阿里巴巴', code: '09988' }] },
+    risks: ['AI Capex 巨额投入回报不确定', '零售利润率波动', '关税与消费疲软', '云竞争（Azure/谷歌云）'],
+    catalysts: ['AWS 增速再加速', '零售利润率超预期', '广告业务高增长', 'Robotaxi/人形机器人远期期权'],
+  }),
+  G({
+    code: 'META', name: 'Meta Platforms', market: 'US', alias: ['meta', '脸书', 'facebook'],
+    industry: '社交/AI', sector: '科技', currency: 'USD',
+    description: '全球最大社交帝国（FB/IG/WhatsApp 40 亿用户），AI 驱动广告推荐效率大幅提升，Reality Labs 长期投入仍在亏损。',
+    price: 640, changePct: -0.5, marketCap: 162000,
+    valuation: { pe: 25, pePercentile: 48, pb: 8.8, dividendYield: 0.33, peerAvgPe: 26 },
+    financials: { revenue: 11840, revenueGrowth: 21.9, netProfit: 4490, profitGrowth: 59.0, grossMargin: 81.7, netMargin: 37.9, roe: 36.7, debtRatio: 29, ocf: 6570 },
+    history: [
+      { year: '2022', revenue: 9120, profit: 1660, roe: 18.6 },
+      { year: '2023', revenue: 9710, profit: 2820, roe: 28.1 },
+      { year: '2024', revenue: 11840, profit: 4490, roe: 36.7 },
+    ],
+    technicals: { change1m: -3.0, change3m: 5.0, change6m: 18.0, change1y: 12.0, high52w: 740, low52w: 442, maTrend: 'above_mid', rsi14: 48, volatility: 'high' },
+    industryContext: { size: '全球数字广告约 8000 亿美元', growth: '广告量价齐升 20%+', stage: '成熟期', concentration: '全球社交媒体用户量第 1', outlook: 'AI 推荐提升 feed 时长与转化率，广告单价仍有提升空间；Llama 开源生态卡位 AI；Reality Labs 年亏 160 亿美元是拖累。' },
+    competitive: { rank: '社交全球第 1', marketShare: '全球社交广告份额约 20%+', moat: ['40 亿用户网络效应', 'AI 推荐系统', 'Llama 开源生态'], competitors: [{ name: '谷歌', code: 'GOOGL' }, { name: '字节跳动（未上市）', code: '' }] },
+    risks: ['Reality Labs 持续巨亏', 'AI Capex 超预期（年 700 亿美元+）', '广告宏观敏感性', '监管（青少年/反垄断）'],
+    catalysts: ['AI 广告工具渗透率提升', '视频号（Reels）变现加速', 'Llama 企业化', '亏损业务效率优化'],
+  }),
+  G({
+    code: 'TSLA', name: '特斯拉', market: 'US', alias: ['tesla', '特斯拉tsla'],
+    industry: '新能源汽车/AI', sector: '新能源', currency: 'USD',
+    description: '全球电动车标杆与智能驾驶领军者，FSD/Robotaxi 与 Optimus 人形机器人构成远期叙事，主业毛利率受价格战与补贴退坡挤压。',
+    price: 425, changePct: 1.5, marketCap: 137000,
+    valuation: { pe: 185, pePercentile: 92, pb: 14.5, dividendYield: 0, peerAvgPe: 25 },
+    financials: { revenue: 7030, revenueGrowth: 0.9, netProfit: 510, profitGrowth: -53.0, grossMargin: 17.9, netMargin: 7.3, roe: 8.2, debtRatio: 40, ocf: 1070 },
+    history: [
+      { year: '2022', revenue: 5920, profit: 934, roe: 23.8 },
+      { year: '2023', revenue: 6960, profit: 1080, roe: 20.5 },
+      { year: '2024', revenue: 7030, profit: 510, roe: 8.2 },
+    ],
+    technicals: { change1m: -8.0, change3m: -5.0, change6m: 15.0, change1y: 8.0, high52w: 488, low52w: 138, maTrend: 'above_mid', rsi14: 46, volatility: 'high' },
+    industryContext: { size: '全球新能源车年销量超 1700 万辆', growth: '渗透率过半后增速放缓，Robotaxi 是新叙事', stage: '成长期', concentration: '全球 EV 份额约 10%（比亚迪 22%）', outlook: '汽车主业毛利率承压（降价+补贴退坡+碳积分减少），估值支撑转向 FSD/Robotaxi/Optimus 期权定价，波动极大。' },
+    competitive: { rank: '全球 EV 第 2', marketShare: '美国 EV 份额约 45%', moat: ['FSD 数据与算力', '超充网络', '制造效率'], competitors: [{ name: '比亚迪', code: '002594' }, { name: '小米集团', code: '01810.HK' }] },
+    risks: ['汽车主业增长停滞/下滑', 'FSD 商业化与监管不确定', '马斯克个人与品牌风险', '估值极高、回撤剧烈'],
+    catalysts: ['Robotaxi 商业化落地', 'FSD 进中国/欧洲', '廉价车型 Model 2/Q', 'Optimus 量产进度'],
+  }),
+  G({
+    code: 'AVGO', name: '博通', market: 'US', alias: ['broadcom', 'broadcomavgo'],
+    industry: '半导体/定制ASIC', sector: '科技', currency: 'USD',
+    description: '全球定制 AI 芯片（ASIC）与网络半导体龙头，为谷歌/微软/Meta 交付自研 AI 加速器，VMware 软件业务提供高利润现金流。',
+    price: 370, changePct: -1.0, marketCap: 173000,
+    valuation: { pe: 62, pePercentile: 78, pb: 22, dividendYield: 0.9, peerAvgPe: 35 },
+    financials: { revenue: 3715, revenueGrowth: 44.0, netProfit: 425, profitGrowth: 34.0, grossMargin: 63.0, netMargin: 11.4, roe: 13.5, debtRatio: 68, ocf: 1400 },
+    history: [
+      { year: 'FY2023', revenue: 2580, profit: 1410, roe: 40.1 },
+      { year: 'FY2024', revenue: 3320, profit: 317, roe: 10.2 },
+      { year: 'FY2025', revenue: 3715, profit: 425, roe: 13.5 },
+    ],
+    technicals: { change1m: 4.0, change3m: 25.0, change6m: 55.0, change1y: 80.0, high52w: 402, low52w: 128, maTrend: 'above_all', rsi14: 60, volatility: 'high' },
+    industryContext: { size: '全球半导体约 7000 亿美元', growth: 'AI ASIC 与网络芯片 40%+ 增长', stage: '成长期', concentration: '定制 ASIC 市场寡头（与 Marvell 双寡头）', outlook: '云厂商自研 ASIC 是对 GPU 成本的理性替代，三家百亿美元级大客户订单可见度延伸至 2027，AI 网络芯片（Tomahawk/Jericho）随集群规模扩张。' },
+    competitive: { rank: 'ASIC 设计全球第 1', marketShare: '定制 AI 芯片代设计份额约 55-60%', moat: ['SerDes/IP 积累', '大客户深度绑定', '软件（VMware）现金流'], competitors: [{ name: '英伟达', code: 'NVDA' }, { name: 'Marvell', code: 'MRVL' }] },
+    risks: ['客户集中度极高（前三大客户）', '估值透支（PE 60+）', '债务负担（收购 VMware）', 'GPU 与 ASIC 路线之争'],
+    catalysts: ['新 ASIC 客户（OpenAI 等）落地', 'AI 网络芯片放量', '2027 订单指引上修', '软件业务利润率优化'],
+  }),
+  G({
+    code: 'TSM', name: '台积电', market: 'US', alias: ['tsmc', '台积电adr'],
+    industry: '半导体代工', sector: '科技', currency: 'USD',
+    description: '全球晶圆代工绝对霸主（份额 65%+），先进制程（3nm/2nm）近乎垄断，AI HPC 需求驱动量价齐升，地缘政治是主要折价因素。',
+    price: 300, changePct: 0.9, marketCap: 70000,
+    valuation: { pe: 27, pePercentile: 70, pb: 8.0, dividendYield: 1.3, peerAvgPe: 25 },
+    financials: { revenue: 6480, revenueGrowth: 33.9, netProfit: 2635, profitGrowth: 33.0, grossMargin: 56.1, netMargin: 40.8, roe: 28.7, debtRatio: 25, ocf: 3000 },
+    history: [
+      { year: '2022', revenue: 4950, profit: 1990, roe: 31.9 },
+      { year: '2023', revenue: 4840, profit: 1980, roe: 26.7 },
+      { year: '2024', revenue: 6480, profit: 2635, roe: 28.7 },
+    ],
+    technicals: { change1m: 3.0, change3m: 15.0, change6m: 35.0, change1y: 40.0, high52w: 318, low52w: 135, maTrend: 'above_all', rsi14: 58, volatility: 'medium' },
+    industryContext: { size: '全球晶圆代工约 2000 亿美元', growth: 'AI 驱动先进制程 30%+ 增长', stage: '成长期', concentration: '先进制程（5nm 以下）份额约 90%', outlook: 'AI 芯片（GPU/ASIC/HBM）全部依赖台积电先进制程与 CoWoS 封装，2026 年涨价延续，2nm 量产顺利；地缘风险由亚利桑那/熊本厂部分对冲。' },
+    competitive: { rank: '代工全球第 1', marketShare: '晶圆代工约 65%', moat: ['制程技术代差', '客户生态（设计绑定）', '规模与良率'], competitors: [{ name: '三星电子', code: '005930.KS' }, { name: '中芯国际', code: '688981' }] },
+    risks: ['台海地缘政治风险', '海外建厂成本摊薄毛利率', '半导体周期性回落', '汇率（NTD）波动'],
+    catalysts: ['2nm 量产与涨价', 'CoWoS 产能翻倍', 'AI 订单能见度延长', '海外厂盈利改善'],
+  }),
+  G({
+    code: 'AMD', name: 'AMD', market: 'US', alias: ['amd', '超威半导体'],
+    industry: '半导体', sector: '科技', currency: 'USD',
+    description: '全球第二大 AI GPU 与 x86 CPU 厂商，MI350 系列追赶英伟达，服务器 CPU 份额持续提升，收购 ZT Systems 强化机架级方案。',
+    price: 215, changePct: -1.8, marketCap: 35000,
+    valuation: { pe: 105, pePercentile: 85, pb: 4.5, dividendYield: 0, peerAvgPe: 35 },
+    financials: { revenue: 1860, revenueGrowth: 13.7, netProfit: 118, profitGrowth: 20.0, grossMargin: 49.0, netMargin: 6.4, roe: 3.6, debtRatio: 25, ocf: 220 },
+    history: [
+      { year: '2022', revenue: 1730, profit: 87, roe: 3.0 },
+      { year: '2023', revenue: 1630, profit: 61, roe: 2.2 },
+      { year: '2024', revenue: 1860, profit: 118, roe: 3.6 },
+    ],
+    technicals: { change1m: -5.0, change3m: 20.0, change6m: 60.0, change1y: 75.0, high52w: 267, low52w: 76, maTrend: 'above_all', rsi14: 52, volatility: 'high' },
+    industryContext: { size: '全球半导体约 7000 亿美元', growth: '数据中心 30%+ 增长', stage: '成长期', concentration: 'AI GPU 双寡头（NVIDIA 主导）', outlook: 'MI350 性能接近 B200 且性价比占优，OpenAI 6GW 合作与美光/Oracle 订单打开 ASIC 外第二曲线；服务器 CPU（EPYC）份额逼近 40%。' },
+    competitive: { rank: 'AI GPU 第 2 / 服务器 CPU 第 2', marketShare: 'x86 CPU 份额约 25-30%', moat: ['Chiplet 封装技术', 'x86 授权与生态', '性价比路线'], competitors: [{ name: '英伟达', code: 'NVDA' }, { name: '英特尔', code: 'INTC' }] },
+    risks: ['MI 系列放量不及预期', 'CUDA 生态壁垒', '客户集中（微软/Meta/OpenAI）', '估值高企（PE 100+）'],
+    catalysts: ['OpenAI 订单执行', 'MI450 发布', 'EPYC 份额再提升', '数据中心毛利率改善'],
+  }),
+  G({
+    code: 'PDD', name: '拼多多', market: 'US', alias: ['pinduoduo', 'pdd', '多多'],
+    industry: '电商', sector: '互联网', currency: 'USD',
+    description: '中国电商性价比之王，Temu 出海打开第二曲线，主站低价心智稳固但利润率受“千亿扶持”生态投入压制。',
+    price: 130, changePct: 1.0, marketCap: 13500,
+    valuation: { pe: 11.5, pePercentile: 15, pb: 4.2, dividendYield: 0, peerAvgPe: 18 },
+    financials: { revenue: 3938, revenueGrowth: 59.0, netProfit: 1126, profitGrowth: 87.0, grossMargin: 62.3, netMargin: 28.6, roe: 45.0, debtRatio: 45, ocf: 1210 },
+    history: [
+      { year: '2022', revenue: 1306, profit: 395, roe: 28.4 },
+      { year: '2023', revenue: 2476, profit: 600, roe: 38.5 },
+      { year: '2024', revenue: 3938, profit: 1126, roe: 45.0 },
+    ],
+    technicals: { change1m: 4.0, change3m: 10.0, change6m: 25.0, change1y: 15.0, high52w: 165, low52w: 82, maTrend: 'above_mid', rsi14: 54, volatility: 'high' },
+    industryContext: { size: '中国实物商品网上零售额约 13 万亿元', growth: '行业个位数增长，Temu 高增长', stage: '成熟期', concentration: 'CR3（阿里/京东/拼多多）约 85%', outlook: '主站 GMV 增速降档但货币化率有提升空间，千亿补贴换取生态可持续；Temu 受美关税与本地化政策扰动大，利润弹性收缩。' },
+    competitive: { rank: '中国电商第 2-3', marketShare: '国内电商份额约 20-25%', moat: ['极致低价心智', 'Temu 全托管模式', '人货匹配算法'], competitors: [{ name: '阿里巴巴', code: '09988' }, { name: '京东集团', code: 'JD' }] },
+    risks: ['生态投入压制利润率', 'Temu 关税与合规风险', '管理层沟通稀缺（不发业绩会）', '国内消费疲软'],
+    catalysts: ['千亿扶持后利润企稳', 'Temu 半托管模式跑通', '货币化率提升', '回购加码'],
+  }),
+  G({
+    code: 'JD', name: '京东集团', market: 'US', alias: ['jd.com', '京东jd'],
+    industry: '电商/零售', sector: '互联网', currency: 'USD',
+    description: '中国自营电商与物流一体化龙头，供应链效率为核心壁垒，外卖大战短期拖累利润，估值处于历史低位。',
+    price: 36, changePct: 0.8, marketCap: 4200,
+    valuation: { pe: 9.5, pePercentile: 12, pb: 1.5, dividendYield: 2.2, peerAvgPe: 18 },
+    financials: { revenue: 11588, revenueGrowth: 6.8, netProfit: 414, profitGrowth: 36.0, grossMargin: 15.9, netMargin: 3.6, roe: 12.8, debtRatio: 55, ocf: 581 },
+    history: [
+      { year: '2022', revenue: 10462, profit: 104, roe: 4.5 },
+      { year: '2023', revenue: 10847, profit: 242, roe: 10.5 },
+      { year: '2024', revenue: 11588, profit: 414, roe: 12.8 },
+    ],
+    technicals: { change1m: 2.0, change3m: 15.0, change6m: 35.0, change1y: 20.0, high52w: 47, low52w: 24, maTrend: 'above_all', rsi14: 56, volatility: 'high' },
+    industryContext: { size: '中国实物商品网上零售额约 13 万亿元', growth: '行业个位数增长', stage: '成熟期', concentration: '自营 B2C 份额约 40%+', outlook: '自营品质心智+物流体验差异化，外卖/即时零售投入是利润主要扰动，供应链利润率修复与股东回报（分红+回购）提供底部支撑。' },
+    competitive: { rank: '中国电商第 2-3', marketShare: '自营电商约 40%', moat: ['自建物流履约', '自营品控', '供应链金融'], competitors: [{ name: '阿里巴巴', code: '09988' }, { name: '拼多多', code: 'PDD' }] },
+    risks: ['外卖大战亏损超预期', '宏观消费疲软', '毛利率结构性偏低', '3C 品类增长见顶'],
+    catalysts: ['外卖投入边际收敛', '外卖带动高频流量与交叉销售', '国补拉动 3C 家电', '利润率修复'],
+  }),
+  G({
+    code: 'BIDU', name: '百度', market: 'US', alias: ['baidu', '百度bidu'],
+    industry: '互联网/AI', sector: '互联网', currency: 'USD',
+    description: '中国搜索巨头转型 AI 全面公司，文心大模型+萝卜快跑 Robotaxi 双叙事，广告主业受宏观与 AI 分流双重挤压。',
+    price: 118, changePct: -0.4, marketCap: 2500,
+    valuation: { pe: 11, pePercentile: 20, pb: 1.0, dividendYield: 1.0, peerAvgPe: 18 },
+    financials: { revenue: 1331, revenueGrowth: -1.1, netProfit: 238, profitGrowth: -8.0, grossMargin: 48.9, netMargin: 17.9, roe: 8.2, debtRatio: 40, ocf: 325 },
+    history: [
+      { year: '2022', revenue: 1237, profit: 75, roe: 2.9 },
+      { year: '2023', revenue: 1346, profit: 203, roe: 8.1 },
+      { year: '2024', revenue: 1331, profit: 238, roe: 8.2 },
+    ],
+    technicals: { change1m: -3.0, change3m: 5.0, change6m: 15.0, change1y: -5.0, high52w: 145, low52w: 72, maTrend: 'above_mid', rsi14: 50, volatility: 'high' },
+    industryContext: { size: '中国在线广告约 1.3 万亿元', growth: '搜索广告承压，AI 云 30%+ 增长', stage: '成熟期', concentration: '中文搜索份额约 60-70%', outlook: '广告基本盘受短视频与 AI 入口分流，AI Cloud（昆仑芯+文心）与萝卜快跑（武汉全无人运营）是估值期权，净现金充裕提供安全垫。' },
+    competitive: { rank: '中文搜索第 1 / AI 云第 4-5', marketShare: '搜索约 65%', moat: ['中文知识图谱', 'AI 全栈自研（芯片-框架-模型）', 'Robotaxi 先发'], competitors: [{ name: '腾讯控股', code: '00700' }, { name: '阿里巴巴', code: '09988' }] },
+    risks: ['广告主业持续下滑', 'AI 投入回报周期长', 'Robotaxi 商业化与政策不确定', '搜索入口被 AI 助手替代'],
+    catalysts: ['AI Cloud 收入加速', '萝卜快跑城市扩张', '文心 5.0 发布', '回购+现金价值重估'],
+  }),
+  G({
+    code: 'NTES', name: '网易', market: 'US', alias: ['netease', '网易ntes'],
+    industry: '游戏/互联网', sector: '互联网', currency: 'USD',
+    description: '中国游戏常青树，自研长青 IP（梦幻西游/逆水寒）+暴雪回归，有道与云音乐提供多元收入，利润率行业领先。',
+    price: 118, changePct: 0.6, marketCap: 5200,
+    valuation: { pe: 15, pePercentile: 25, pb: 3.5, dividendYield: 1.6, peerAvgPe: 18 },
+    financials: { revenue: 1053, revenueGrowth: 1.8, netProfit: 297, profitGrowth: 1.9, grossMargin: 60.5, netMargin: 28.2, roe: 20.0, debtRatio: 30, ocf: 350 },
+    history: [
+      { year: '2022', revenue: 965, profit: 203, roe: 15.2 },
+      { year: '2023', revenue: 1035, profit: 291, roe: 20.6 },
+      { year: '2024', revenue: 1053, profit: 297, roe: 20.0 },
+    ],
+    technicals: { change1m: 1.0, change3m: 8.0, change6m: 18.0, change1y: 25.0, high52w: 135, low52w: 78, maTrend: 'above_all', rsi14: 55, volatility: 'medium' },
+    industryContext: { size: '中国游戏市场约 3300 亿元', growth: '行业个位数增长，出海双位数', stage: '成熟期', concentration: '腾讯+网易合计约 60%', outlook: '长青游戏运营（十年 IP 仍稳定贡献）+新游储备（燕云十六声等），暴雪国服回归带来增量，分红+回购股东回报稳定。' },
+    competitive: { rank: '中国游戏第 2', marketShare: '国内游戏份额约 20-25%', moat: ['长青 IP 运营能力', '自研引擎', '精品化路线'], competitors: [{ name: '腾讯控股', code: '00700' }, { name: '哔哩哔哩', code: 'BILI' }] },
+    risks: ['新游流水不及预期', '版号监管不确定性', '游戏生命周期管理', '出海竞争激烈'],
+    catalysts: ['暴雪国服回归增量', '新游上线', '出海收入占比提升', '分红回购持续'],
+  }),
+  G({
+    code: 'NIO', name: '蔚来', market: 'US', alias: ['nio', '蔚来nio'],
+    industry: '新能源汽车', sector: '新能源', currency: 'USD',
+    description: '中国高端纯电代表，换电网络独一无二（3400+ 站），多品牌（蔚来/乐道/萤火虫）扩张，亏损收窄是核心观察点。',
+    price: 6.8, changePct: -1.2, marketCap: 1050,
+    valuation: { pe: null, pePercentile: null, pb: 6.5, dividendYield: 0, peerAvgPe: 25 },
+    financials: { revenue: 657, revenueGrowth: 18.2, netProfit: -224, profitGrowth: -8.2, grossMargin: 9.9, netMargin: -34.1, roe: -55.0, debtRatio: 70, ocf: -80 },
+    history: [
+      { year: '2022', revenue: 492, profit: -144, roe: -45.3 },
+      { year: '2023', revenue: 556, profit: -207, roe: -52.1 },
+      { year: '2024', revenue: 657, profit: -224, roe: -55.0 },
+    ],
+    technicals: { change1m: -6.0, change3m: -10.0, change6m: -15.0, change1y: -30.0, high52w: 11.5, low52w: 3.0, maTrend: 'below_all', rsi14: 35, volatility: 'high' },
+    industryContext: { size: '中国新能源车年销量超 1200 万辆', growth: '纯电高端市场渗透加快', stage: '成长期', concentration: 'BBA 转型缓慢留下高端真空', outlook: '乐道 L60 上量与萤火虫出海是销量变量，换电模式与宁德合作（巧克力换电）打开 B 端；资金消耗仍快，依赖融资节奏。' },
+    competitive: { rank: '中国高端纯电第 2-3', marketShare: '30 万以上纯电约 15%', moat: ['换电网络', '用户社区运营', '全栈自研'], competitors: [{ name: '理想汽车', code: 'LI' }, { name: '小鹏汽车', code: 'XPEV' }] },
+    risks: ['持续亏损与现金消耗', '换电重资产模式回报周期', '价格战压缩毛利', '融资稀释'],
+    catalysts: ['新品牌车型放量', '毛利率改善（NT3.0 平台）', '换电联盟扩大', '亏损拐点确认'],
+  }),
+  G({
+    code: 'LI', name: '理想汽车', market: 'US', alias: ['lixiang', '理想li'],
+    industry: '新能源汽车', sector: '新能源', currency: 'USD',
+    description: '中国增程式电动车开创者，家庭用车定位精准，曾是新势力盈利第一，纯电 i 系列与智驾追赶是下一阶段胜负手。',
+    price: 24, changePct: -0.8, marketCap: 1700,
+    valuation: { pe: 18, pePercentile: 30, pb: 2.2, dividendYield: 0, peerAvgPe: 25 },
+    financials: { revenue: 1445, revenueGrowth: 16.6, netProfit: 80, profitGrowth: -31.9, grossMargin: 20.5, netMargin: 5.6, roe: 11.4, debtRatio: 45, ocf: 142 },
+    history: [
+      { year: '2022', revenue: 453, profit: -20, roe: -8.5 },
+      { year: '2023', revenue: 1239, profit: 118, roe: 22.8 },
+      { year: '2024', revenue: 1445, profit: 80, roe: 11.4 },
+    ],
+    technicals: { change1m: -4.0, change3m: -8.0, change6m: -12.0, change1y: -25.0, high52w: 43, low52w: 17, maTrend: 'below_all', rsi14: 40, volatility: 'high' },
+    industryContext: { size: '中国新能源车年销量超 1200 万辆', growth: '增程市场高增后竞争加剧', stage: '成长期', concentration: '增程赛道理想份额约 40%+', outlook: 'L 系列月销 2.5 万辆基本盘稳固但均价下移，i6/i8 纯电面临激烈竞争，VLA 司机大模型智驾追赶头部，现金储备超千亿提供缓冲。' },
+    competitive: { rank: '新势力销量第 1-2', marketShare: '增程式约 40-45%', moat: ['家庭用户心智', '增程技术路线', '渠道与交付效率'], competitors: [{ name: '小鹏汽车', code: 'XPEV' }, { name: '蔚来', code: 'NIO' }] },
+    risks: ['纯电 i 系列竞争失利', '价格战拖累毛利率', '智驾第一梯队掉队风险', 'MEGA 失利余波'],
+    catalysts: ['i6 订单超预期', 'VLA 智驾落地', '出海（中东/拉美）', '毛利率回升'],
+  }),
+  G({
+    code: 'XPEV', name: '小鹏汽车', market: 'US', alias: ['xiaopeng', '小鹏xpev'],
+    industry: '新能源汽车', sector: '新能源', currency: 'USD',
+    description: '中国智驾第一梯队与性价比智能电动车代表，MONA M03/P7+ 以智驾平权走量大单品的路线初见成效，图灵芯片自研落地。',
+    price: 19.5, changePct: -1.5, marketCap: 1450,
+    valuation: { pe: null, pePercentile: null, pb: 3.2, dividendYield: 0, peerAvgPe: 25 },
+    financials: { revenue: 409, revenueGrowth: 33.2, netProfit: -58, profitGrowth: 44.0, grossMargin: 14.3, netMargin: -14.2, roe: -35.0, debtRatio: 55, ocf: -35 },
+    history: [
+      { year: '2022', revenue: 268, profit: -91, roe: -58.2 },
+      { year: '2023', revenue: 306, profit: -104, roe: -66.5 },
+      { year: '2024', revenue: 409, profit: -58, roe: -35.0 },
+    ],
+    technicals: { change1m: 8.0, change3m: 35.0, change6m: 80.0, change1y: 55.0, high52w: 27, low52w: 6, maTrend: 'above_all', rsi14: 62, volatility: 'high' },
+    industryContext: { size: '中国新能源车年销量超 1200 万辆', growth: '10-20 万级智驾纯电放量', stage: '成长期', concentration: '智驾方案自研厂商少数玩家', outlook: 'MONA M03 连续月交付破万验证走量逻辑，P7+ 智驾平权打开 15-20 万市场，2025 冲击 38 万辆目标；物理 AI（Robotaxi/人形机器人）提供远期叙事。' },
+    competitive: { rank: '新势力第 3-5', marketShare: '智驾纯电细分领先', moat: ['智驾全栈自研', '图灵 AI 芯片', '成本控制（鲲鹏体系）'], competitors: [{ name: '理想汽车', code: 'LI' }, { name: '比亚迪', code: '002594' }] },
+    risks: ['持续亏损、盈利时点未明', '走量车型毛利率偏低', '智驾监管收紧', '竞争极度激烈'],
+    catalysts: ['新车型（G7/K 系）放量', '毛利率转正路径明确', 'Robotaxi 2026 落地预期', '出口放量'],
+  }),
+]
+
+/** 按代码/名称/ticker/别名匹配全球标的 */
+export function findGlobalStock(key: string): StockProfile | null {
+  const k = key.trim().toLowerCase()
+  if (!k) return null
+  for (const s of GLOBAL_STOCKS) {
+    const keys = [s.code.toLowerCase(), s.name.toLowerCase(), ...s.alias.map((a) => a.toLowerCase())]
+    if (keys.some((x) => x === k)) return s
+  }
+  // 模糊包含（如"英伟达NVDA"）
+  for (const s of GLOBAL_STOCKS) {
+    if (s.name.toLowerCase().includes(k) || k.includes(s.name.toLowerCase())) return s
+    if (s.alias.some((a) => k.includes(a.toLowerCase()) && a.length >= 2)) return s
+  }
+  return null
+}
