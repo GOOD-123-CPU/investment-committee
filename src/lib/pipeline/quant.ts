@@ -122,9 +122,13 @@ export function computeQuantMetrics(
     low52 = quote.low52w
   }
   const refPrice = quote?.price || s.price || lastClose || 0
-  const pos52w = high52 > low52 && refPrice > 0
+  const rawPos52w = high52 > low52 && refPrice > 0
     ? Math.round(((refPrice - low52) / (high52 - low52)) * 100)
     : 50
+  // Quote and K-line windows can come from slightly different timestamps.
+  // Keep the semantic "52-week position" contract bounded even if the latest
+  // quote prints above/below the sampled window extrema.
+  const pos52w = Math.max(0, Math.min(100, rawPos52w))
 
   // 区间收益：真实 K 线优先，快照回退
   const m1 = returnOver(closes, 21) ?? t.change1m
