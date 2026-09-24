@@ -4,6 +4,8 @@
 
 Built with Next.js, React, TypeScript, Prisma/SQLite, Bun, and OpenAI-compatible model providers.
 
+[![CI](https://github.com/GOOD-123-CPU/investment-committee/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/GOOD-123-CPU/investment-committee/actions/workflows/ci.yml)
+
 > This repository is a research/engineering project. Generated analysis is not financial advice, and model output should not be treated as authoritative market data.
 
 ## Why this project
@@ -132,7 +134,11 @@ Model-generated conclusions should be checked against the structured evidence sh
 
 ## Current verification scope
 
-The repository currently exposes lint/build scripts and application-level fallback logic, but its automated test/CI evidence is not yet as complete as the author's more mature repositories. Adding deterministic unit tests for quant calculations, agent-output normalization, and pipeline failure paths is a priority for subsequent engineering work.
+GitHub Actions now performs a frozen Bun install, Prisma Client generation, ESLint, and a full Next.js production build. The first CI runs also exposed that standalone WebSocket examples and Bun maintenance scripts were unintentionally included in the web application's TypeScript compilation boundary; the app config now keeps those independent tools out of the Next.js type-check.
+
+The successful verification run is [CI #3](https://github.com/GOOD-123-CPU/investment-committee/actions/runs/35949480896).
+
+Automated unit coverage is still less mature than the build verification. The next high-value additions are deterministic tests for quant calculations, agent-output normalization, and pipeline failure/fallback paths.
 
 ## Disclaimer
 
