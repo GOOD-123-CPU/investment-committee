@@ -136,9 +136,11 @@ Model-generated conclusions should be checked against the structured evidence sh
 
 GitHub Actions now performs a frozen Bun install, Prisma Client generation, ESLint, and a full Next.js production build. The first CI runs also exposed that standalone WebSocket examples and Bun maintenance scripts were unintentionally included in the web application's TypeScript compilation boundary; the app config now keeps those independent tools out of the Next.js type-check.
 
-The successful verification run is [CI #3](https://github.com/GOOD-123-CPU/investment-committee/actions/runs/35949480896).
+The initial build-verification milestone is [CI #3](https://github.com/GOOD-123-CPU/investment-committee/actions/runs/35949480896). Deterministic-core tests and the 52-week-position fix were subsequently verified in [CI #6](https://github.com/GOOD-123-CPU/investment-committee/actions/runs/35950545580).
 
-Automated unit coverage is still less mature than the build verification. The next high-value additions are deterministic tests for quant calculations, agent-output normalization, and pipeline failure/fallback paths.
+The deterministic core is now covered by Bun unit tests and runs before the production build in CI. The suite locks rating thresholds, missing-dimension renormalization, very-high-risk vetoes, risk-penalty clamps, position sizing, confidence adjustment, snapshot/live quantitative precedence, and technical-metric bounds. The first test run exposed a real edge case where the latest quote could place the computed 52-week position above 100 when quote and K-line windows differed; the metric is now clamped to its documented 0–100 semantic range.
+
+Agent-output normalization and full pipeline failure/fallback integration tests remain the next layer; those are separate from the deterministic numeric guardrails already verified here.
 
 ## Disclaimer
 
